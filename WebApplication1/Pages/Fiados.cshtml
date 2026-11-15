@@ -1,0 +1,211 @@
+﻿@page
+@model FiadosModel
+@{
+    ViewData["Title"] = "Controle de Fiados - Barbearia";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            background-color: #1E1E2E;
+            color: #F8FAFC;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #27273A;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #3F3F5A;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            header h1 {
+                margin: 0;
+                font-size: 1.4rem;
+                color: #38BDF8;
+            }
+
+        nav a {
+            color: #E2E8F0;
+            text-decoration: none;
+            margin-left: 1rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+        }
+
+            nav a.ativo, nav a:hover {
+                background-color: #38BDF8;
+                color: #0F172A;
+            }
+
+        .container {
+            max-width: 950px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .card {
+            background-color: #27273A;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #3F3F5A;
+        }
+
+            .card h2 {
+                margin-top: 0;
+                color: #FBBF24;
+                font-size: 1.3rem;
+                border-bottom: 1px solid #3F3F5A;
+                padding-bottom: 0.75rem;
+            }
+
+        .resumo-pendente {
+            background-color: #1E1E2E;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #FBBF24;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .resumo-pendente span {
+                font-size: 1rem;
+                color: #94A3B8;
+            }
+
+            .resumo-pendente strong {
+                font-size: 1.4rem;
+                color: #FBBF24;
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 0.85rem;
+            border-bottom: 1px solid #3F3F5A;
+            font-size: 0.95rem;
+        }
+
+        th {
+            color: #94A3B8;
+        }
+
+        .form-quitar {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+            .form-quitar select {
+                padding: 0.45rem;
+                border-radius: 6px;
+                border: 1px solid #3F3F5A;
+                background-color: #1E1E2E;
+                color: #FFFFFF;
+                font-size: 0.85rem;
+            }
+
+        .btn-quitar {
+            padding: 0.45rem 0.9rem;
+            background-color: #10B981;
+            color: #064E3B;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background-color 0.2s;
+        }
+
+            .btn-quitar:hover {
+                background-color: #34D399;
+            }
+
+        .vazio-aviso {
+            text-align: center;
+            color: #94A3B8;
+            padding: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Barbearia Silva</h1>
+        <nav>
+            <a href="/Caixa">Caixa</a>
+            <a href="/Fiados" class="ativo">Fiados</a>
+            <a href="/Historico">Todas Movimentações</a>
+            <a href="/Index">Sair</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="card">
+            <h2>Pendências em Aberto (Fiados)</h2>
+
+            <div class="resumo-pendente">
+                <span>Total a Receber:</span>
+                <strong>R$ @Model.TotalPendente.ToString("F2")</strong>
+            </div>
+
+            @if (Model.ListaFiados.Count <= 0)
+            {
+                <p class="vazio-aviso">Nenhuma pendência de fiado encontrada no momento.</p>
+            }
+            else
+            {
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Cliente</th>
+                            <th>Serviço</th>
+                            <th>Valor</th>
+                            <th>Dar Baixa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ListaFiados)
+                        {
+                            <tr>
+                                <td>@item.DataHora</td>
+                                <td><strong>@item.Cliente</strong></td>
+                                <td>@item.Servico</td>
+                                <td>R$ @item.Valor.ToString("F2")</td>
+                                <td>
+                                    <form method="post" asp-page-handler="Quitar" class="form-quitar">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <select name="formaPagamento">
+                                            <option value="Pix">Pix</option>
+                                            <option value="Dinheiro">Dinheiro</option>
+                                            <option value="Cartão">Cartão</option>
+                                        </select>
+                                        <button type="submit" class="btn-quitar">Quitar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </section>
+    </main>
+</body>
+</html>

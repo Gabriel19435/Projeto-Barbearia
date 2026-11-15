@@ -1,0 +1,143 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Login - Barbearia";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        /* Estilo embutido de alto contraste para garantir funcionamento imediato */
+        body {
+            background-color: #1E1E2E;
+            color: #F8FAFC;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background-color: #27273A;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 380px;
+            border: 1px solid #3F3F5A;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: #38BDF8;
+        }
+
+        .login-header p {
+            margin: 0.5rem 0 0;
+            color: #94A3B8;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #E2E8F0;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 2px solid #3F3F5A;
+            background-color: #1E1E2E;
+            color: #FFFFFF;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #38BDF8;
+        }
+
+        .btn-entrar {
+            width: 100%;
+            padding: 0.85rem;
+            background-color: #38BDF8;
+            color: #0F172A;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .btn-entrar:hover, .btn-entrar:focus {
+            background-color: #7DD3FC;
+            outline: none;
+        }
+
+        .erro-mensagem {
+            background-color: rgba(239, 68, 68, 0.15);
+            border: 1px solid #EF4444;
+            color: #FCA5A5;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1.25rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <main class="login-container">
+        <div class="login-header">
+            <h1>Barbearia Silva</h1>
+            <p>Acesso ao Sistema de Caixa</p>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.MensagemErro))
+        {
+            <div class="erro-mensagem" role="alert">
+                @Model.MensagemErro
+            </div>
+        }
+
+        <form method="post">
+            <div class="form-group">
+                <label for="Usuario">Operador</label>
+                <input type="text" id="Usuario" asp-for="Usuario" placeholder="Digite seu login" required autofocus />
+            </div>
+
+            <div class="form-group">
+                <label for="Senha">Senha</label>
+                <input type="password" id="Senha" asp-for="Senha" placeholder="Digite sua senha" required />
+            </div>
+
+            <button type="submit" class="btn-entrar">Entrar</button>
+        </form>
+    </main>
+</body>
+</html>

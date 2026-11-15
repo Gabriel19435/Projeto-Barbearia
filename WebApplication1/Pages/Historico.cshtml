@@ -1,0 +1,280 @@
+﻿@page
+@model HistoricoModel
+@{
+    ViewData["Title"] = "Todas as Movimentações - Barbearia";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            background-color: #1E1E2E;
+            color: #F8FAFC;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #27273A;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #3F3F5A;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            header h1 {
+                margin: 0;
+                font-size: 1.4rem;
+                color: #38BDF8;
+            }
+
+        nav a {
+            color: #E2E8F0;
+            text-decoration: none;
+            margin-left: 1rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+        }
+
+            nav a.ativo, nav a:hover {
+                background-color: #38BDF8;
+                color: #0F172A;
+            }
+
+        .container {
+            max-width: 1150px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .card {
+            background-color: #27273A;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #3F3F5A;
+        }
+
+        .topo-lista {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #3F3F5A;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+            .topo-lista h2 {
+                margin: 0;
+                color: #38BDF8;
+                font-size: 1.3rem;
+            }
+
+        .filtros {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+            .filtros a {
+                text-decoration: none;
+                padding: 0.4rem 0.8rem;
+                border-radius: 6px;
+                font-size: 0.85rem;
+                font-weight: bold;
+                background-color: #1E1E2E;
+                color: #94A3B8;
+                border: 1px solid #3F3F5A;
+            }
+
+                .filtros a.selecionado {
+                    border-color: #38BDF8;
+                    color: #38BDF8;
+                    background-color: rgba(56, 189, 248, 0.1);
+                }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 0.85rem 0.5rem;
+            border-bottom: 1px solid #3F3F5A;
+            font-size: 0.95rem;
+        }
+
+        th {
+            color: #94A3B8;
+        }
+
+        .badge-fiado {
+            background-color: rgba(245, 158, 11, 0.2);
+            color: #FBBF24;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .badge-pago {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: #34D399;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .acao-inline {
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+        }
+
+            .acao-inline select {
+                padding: 0.35rem;
+                border-radius: 5px;
+                border: 1px solid #3F3F5A;
+                background-color: #1E1E2E;
+                color: #FFFFFF;
+                font-size: 0.8rem;
+            }
+
+        .btn-pagar {
+            padding: 0.35rem 0.7rem;
+            background-color: #10B981;
+            color: #064E3B;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+            .btn-pagar:hover {
+                background-color: #34D399;
+            }
+
+        .btn-deletar {
+            padding: 0.35rem 0.7rem;
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #FCA5A5;
+            border: 1px solid #EF4444;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+            .btn-deletar:hover {
+                background-color: #EF4444;
+                color: #FFFFFF;
+            }
+
+        .vazio-aviso {
+            text-align: center;
+            color: #94A3B8;
+            padding: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Barbearia Silva</h1>
+        <nav>
+            <a href="/Caixa">Caixa</a>
+            <a href="/Fiados">Fiados</a>
+            <a href="/Historico" class="ativo">Todas Movimentações</a>
+            <a href="/Index">Sair</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="card">
+            <div class="topo-lista">
+                <h2>Histórico Geral (@Model.Itens.Count registros)</h2>
+                <div class="filtros">
+                    <a href="/Historico?filtro=todos" class="@(Model.FiltroAtual == "todos" ? "selecionado" : "")">Todos</a>
+                    <a href="/Historico?filtro=fiado" class="@(Model.FiltroAtual == "fiado" ? "selecionado" : "")">Apenas Fiados</a>
+                    <a href="/Historico?filtro=pagos" class="@(Model.FiltroAtual == "pagos" ? "selecionado" : "")">Pagos</a>
+                </div>
+            </div>
+
+            @if (Model.Itens.Count <= 0)
+            {
+                <p class="vazio-aviso">Nenhum registro encontrado para este filtro.</p>
+            }
+            else
+            {
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Data / Hora</th>
+                            <th>Cliente</th>
+                            <th>Serviço</th>
+                            <th>Status / Pagamento</th>
+                            <th>Valor</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Itens)
+                        {
+                            <tr>
+                                <td>#@item.Id</td>
+                                <td>@item.DataHora</td>
+                                <td><strong>@item.Cliente</strong></td>
+                                <td>@item.Servico</td>
+                                <td>
+                                    @if (item.FormaPagamento == "Fiado")
+                                    {
+                                        <span class="badge-fiado">Pendente (Fiado)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge-pago">Pago (@item.FormaPagamento)</span>
+                                    }
+                                </td>
+                                <td>R$ @item.Valor.ToString("F2")</td>
+                                <td>
+                                    @if (item.FormaPagamento == "Fiado")
+                                    {
+                                        <form method="post" asp-page-handler="Pagar" class="acao-inline">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <input type="hidden" name="filtro" value="@Model.FiltroAtual" />
+                                            <select name="formaPagamento">
+                                                <option value="Pix">Pix</option>
+                                                <option value="Dinheiro">Dinheiro</option>
+                                                <option value="Cartão">Cartão</option>
+                                            </select>
+                                            <button type="submit" class="btn-pagar">Pago</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form method="post" asp-page-handler="Deletar" class="acao-inline" onsubmit="return confirm('Tem certeza que deseja deletar este registro?');">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <input type="hidden" name="filtro" value="@Model.FiltroAtual" />
+                                            <button type="submit" class="btn-deletar">Deletar</button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </section>
+    </main>
+</body>
+</html>

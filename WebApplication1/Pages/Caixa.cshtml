@@ -1,0 +1,330 @@
+﻿@page
+@model CaixaModel
+@{
+    ViewData["Title"] = "Controle de Caixa - Barbearia";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            background-color: #1E1E2E;
+            color: #F8FAFC;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #27273A;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #3F3F5A;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.4rem;
+            color: #38BDF8;
+        }
+
+        nav a {
+            color: #E2E8F0;
+            text-decoration: none;
+            margin-left: 1rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+        }
+
+        nav a.ativo, nav a:hover {
+            background-color: #38BDF8;
+            color: #0F172A;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 2.2fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background-color: #27273A;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #3F3F5A;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #38BDF8;
+            font-size: 1.2rem;
+            border-bottom: 1px solid #3F3F5A;
+            padding-bottom: 0.75rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+            color: #E2E8F0;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.65rem;
+            border-radius: 6px;
+            border: 2px solid #3F3F5A;
+            background-color: #1E1E2E;
+            color: #FFFFFF;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #38BDF8;
+        }
+
+        .btn-salvar {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #38BDF8;
+            color: #0F172A;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        .btn-salvar:hover {
+            background-color: #7DD3FC;
+        }
+
+        .resumo-total {
+            background-color: #1E1E2E;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #38BDF8;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .resumo-total span {
+            font-size: 1rem;
+            color: #94A3B8;
+        }
+
+        .resumo-total strong {
+            font-size: 1.4rem;
+            color: #38BDF8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.5rem;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 0.75rem 0.5rem;
+            border-bottom: 1px solid #3F3F5A;
+            font-size: 0.9rem;
+        }
+
+        th {
+            color: #94A3B8;
+        }
+
+        .badge-fiado {
+            background-color: rgba(245, 158, 11, 0.2);
+            color: #FBBF24;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .acao-inline {
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+        }
+
+        .acao-inline select {
+            padding: 0.35rem;
+            border-radius: 5px;
+            border: 1px solid #3F3F5A;
+            background-color: #1E1E2E;
+            color: #FFFFFF;
+            font-size: 0.8rem;
+        }
+
+        .btn-pagar {
+            padding: 0.35rem 0.7rem;
+            background-color: #10B981;
+            color: #064E3B;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .btn-pagar:hover {
+            background-color: #34D399;
+        }
+
+        .btn-deletar {
+            padding: 0.35rem 0.7rem;
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #FCA5A5;
+            border: 1px solid #EF4444;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .btn-deletar:hover {
+            background-color: #EF4444;
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Barbearia Silva</h1>
+        <nav>
+            <a href="/Caixa" class="ativo">Caixa</a>
+            <a href="/Fiados">Fiados</a>
+            <a href="/Historico">Todas Movimentações</a>
+            <a href="/Index">Sair</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="card">
+            <h2>Novo Atendimento</h2>
+            <form method="post">
+                <div class="form-group">
+                    <label for="Cliente">Nome do Cliente</label>
+                    <input type="text" id="Cliente" asp-for="Cliente" placeholder="Ex: João Silva" required autofocus />
+                </div>
+
+                <div class="form-group">
+                    <label for="Servico">Serviço / Descrição</label>
+                    <input type="text" id="Servico" asp-for="Servico" list="servicos-sugeridos" placeholder="Digite ou escolha o serviço..." required />
+                    <datalist id="servicos-sugeridos">
+                        <option value="Corte Masculino" />
+                        <option value="Barba" />
+                        <option value="Corte + Barba" />
+                        <option value="Sobrancelha" />
+                        <option value="Pigmentação" />
+                    </datalist>
+                </div>
+
+                <div class="form-group">
+                    <label for="Valor">Valor (R$)</label>
+                    <input type="number" step="0.01" id="Valor" asp-for="Valor" placeholder="35.00" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="FormaPagamento">Pagamento</label>
+                    <select id="FormaPagamento" asp-for="FormaPagamento">
+                        <option value="Pix">Pix</option>
+                        <option value="Dinheiro">Dinheiro</option>
+                        <option value="Cartão">Cartão</option>
+                        <option value="Fiado">Fiado (Anotar pendência)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-salvar">Registrar no Caixa</button>
+            </form>
+        </section>
+
+        <section class="card">
+            <h2>Movimentações Recentes</h2>
+
+            <div class="resumo-total">
+                <span>Total Recebido (Pago):</span>
+                <strong>R$ @Model.TotalRecebido.ToString("F2")</strong>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Hora</th>
+                        <th>Cliente</th>
+                        <th>Serviço</th>
+                        <th>Status / Pagto</th>
+                        <th>Valor</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Atendimentos)
+                    {
+                        <tr>
+                            <td>@item.DataHora.Split(' ')[1]</td>
+                            <td>@item.Cliente</td>
+                            <td>@item.Servico</td>
+                            <td>
+                                @if (item.FormaPagamento == "Fiado")
+                                {
+                                    <span class="badge-fiado">Fiado</span>
+                                }
+                                else
+                                {
+                                    @item.FormaPagamento
+                                }
+                            </td>
+                            <td>R$ @item.Valor.ToString("F2")</td>
+                            <td>
+                                @if (item.FormaPagamento == "Fiado")
+                                {
+                                    <form method="post" asp-page-handler="Pagar" class="acao-inline">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <select name="formaPagamento">
+                                            <option value="Pix">Pix</option>
+                                            <option value="Dinheiro">Dinheiro</option>
+                                            <option value="Cartão">Cartão</option>
+                                        </select>
+                                        <button type="submit" class="btn-pagar">Pago</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form method="post" asp-page-handler="Deletar" class="acao-inline" onsubmit="return confirm('Tem certeza que deseja deletar este registro?');">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit" class="btn-deletar">Deletar</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>
